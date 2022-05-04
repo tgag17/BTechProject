@@ -5,24 +5,24 @@ import time
 
 sim = Aer.get_backend('aer_simulator')
 
-def make_chsh_circuit(theta_vec, flip_err_x = 0, flip_err_z = 0):
+def make_chsh_circuit():
    
     chsh_circuits = []
-    
-    for theta in theta_vec:
-        obs_vec = ['00', '01', '10', '11']
-        for el in obs_vec:
-            qc = QuantumCircuit(2,2)
-            qc.h(0)
-            qc.cx(0, 1)
-            qc.barrier() 
-            qc.ry(theta, 0)
-            qc.barrier() 
-            for a in range(2):
-                if el[a] == '1':
-                    qc.h(a) 
-            qc.measure(range(2),range(2))
-            chsh_circuits.append(qc)
+    theta = np.pi/10
+
+    obs_vec = ['00']
+    for el in obs_vec:
+        qc = QuantumCircuit(2,2)
+        qc.h(0)
+        qc.cx(0, 1)
+        qc.barrier() 
+        qc.ry(theta, 0)
+        qc.barrier() 
+        for a in range(2):
+            if el[a] == '1':
+                qc.h(a) 
+        qc.measure(range(2),range(2))
+        chsh_circuits.append(qc)
 
     return chsh_circuits  
 
@@ -70,9 +70,7 @@ def compute_chsh_witness(counts):
     return CHSH1, CHSH2
 
 
-number_of_thetas = 21
-theta_vec = np.linspace(0,2*np.pi,number_of_thetas)
-my_chsh_circuits = make_chsh_circuit(theta_vec, 0)
+my_chsh_circuits = make_chsh_circuit()
 
 tic = time.time()
 result_ideal = sim.run(my_chsh_circuits).result()
