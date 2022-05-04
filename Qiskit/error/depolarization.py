@@ -2,16 +2,19 @@ from qiskit import QuantumCircuit, execute, Aer
 import qiskit.providers.aer.noise as noise
 import numpy as np
 
-lim = np.linspace(0,1,21)
+lim = np.linspace(0, 2*np.pi, 21)
 
 y = []
-for k in lim:    
+for i in lim:
     
-    error_1 = noise.amplitude_damping_error(k, 0)
+    
+    error_1 = noise.depolarizing_error(i, 1)
+    error_2 = noise.depolarizing_error(i, 2)
 
     # Add errors to noise model
     noise_model = noise.NoiseModel()
     noise_model.add_all_qubit_quantum_error(error_1, ['u1', 'u2', 'u3'])
+    noise_model.add_all_qubit_quantum_error(error_2, ['cx'])
 
     # Get basis gates from noise model
     basis_gates = noise_model.basis_gates
@@ -48,3 +51,4 @@ for k in lim:
         s.append(exp_value)
         
     y.append(s[0] + s[1] - s[2] + s[3])
+
