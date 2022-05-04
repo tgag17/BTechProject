@@ -14,9 +14,9 @@ for k in l:
     "tsp_model_error": [1.0, 0.0],
     "thermal_factor": 1.0,
     "decoherence_factor": 1.0,
-    "depolarization_factor": 1.0,
+    "depolarization_factor": k,
     "bell_depolarization_factor": 1.0,
-    "decay_factor": k,
+    "decay_factor": 1.0,
     }
    
     s = []
